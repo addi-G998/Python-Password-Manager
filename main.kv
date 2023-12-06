@@ -1,0 +1,99 @@
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+<CustomDialogContent>
+    #cols: 1
+    rows: 2
+    spacing: '12dp'
+    padding: '12dp'
+    size_hint_y: None
+    height: '120dp'
+
+    MDTextField:
+        id: text_field_1
+        size_hint_x: .5
+        hint_text: "Text Field 1"
+
+    MDTextField:
+        id: text_field_2
+        size_hint_x: .5
+        hint_text: "Text Field 2"
+
+<PostItem>:
+    OneLineListItem:
+<Content>:
+    ScrollView:
+        MDList:
+            OneLineListItem:
+                text: "Go to screen 1"
+                on_release:
+                    root.manager.transition = NoTransition()
+                    root.manager.current  = "First"
+
+
+            OneLineListItem:
+                text: "Go to screen 2"
+                on_release:
+                    root.manager.transition = NoTransition()
+                    root.manager.current  = "Second"
+
+
+<Demo>:
+    Screen:
+        MDTopAppBar:
+            id:top_app_bar
+            pos_hint: {"top": 1}
+            #title: "Navigation Drawer"
+            evelation: 8
+            left_action_items: [["menu",lambda x: nav_drawer.set_state("open")]]
+
+        FloatLayout:
+            MDTextField:
+                hint_text: "Search Password"
+                #color_mode: 'custom'
+                max_text_length: 15
+                size_hint_x: 0.425
+                line_color_focus: 0.92, 0.25, 0.20
+                hint_text_color_normal: "red"
+                text_color_focus: '#ff0000'
+                text_color_normal: '#00ff00'
+                pos_hint: {"right": 1.0, "top": 1.0}
+
+
+
+
+        MDNavigationLayout:
+            ScreenManager:
+                id: screen_manager
+                Screen:
+                    id: main_screen
+                    name: "First"
+                    BoxLayout:
+                        orientation: 'vertical'
+                        pos_hint: {"y": -.052, "x": 0}
+
+                        ScrollView:
+                            size_hint_y: None
+                            height: root.height - top_app_bar.height / 2
+                            y: top_app_bar.height / 2
+                            MDList:
+                                orientation: 'lr-tb'
+                                width: Window.width
+                                id:list_view
+                                name: "list_view"
+
+                    FloatLayout:
+                        MDIconButton:
+                            icon:'android'
+                            pos_hint: {"y":.15, "x": 0.75}
+                            on_release:
+                                app.show_dialog()
+
+                Screen:
+                    name: "Second"
+                    MDLabel:
+                        text: "2nd Screen"
+
+            MDNavigationDrawer:
+                id: nav_drawer
+                Content:
+                    manager: screen_manager
+                    nav_drw: nav_drawer
